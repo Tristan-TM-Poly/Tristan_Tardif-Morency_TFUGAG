@@ -10,6 +10,7 @@ from .delivery_harness import DeliveryAssessment, DeliveryHarnessAdapter, Delive
 from .engine import TFUGAEngine
 from .github_orchestrator import GitHubActivationPlan, GitHubOrchestrator
 from .hgfm import HGFMBuilder, HGFMGraph
+from .ip_docket import AITIPDocket, IPDisclosure, IPDocketPlan
 from .local_ai_council import CouncilDecision, LocalAICouncilAdapter, ModelAnswer
 from .memory import MemoryEdge, MemoryGraph, MemoryNode
 from .miner import GraphProblemMiner, ProblemSeed
@@ -28,7 +29,7 @@ __all__ = [
     "AITCapabilityAbsorber", "AbsorptionPlan", "CapabilityCard", "CapabilityPolicy", "IntegrationBacklogItem",
     "AlgebraRoute", "TGFAAlgebraRouter", "AITControlPlane", "ControlPlaneInput", "ControlPlaneReport", "CVCDResidue", "OmniCVCDExtractor",
     "DeliveryAssessment", "DeliveryHarnessAdapter", "DeliverySignal", "TFUGAEngine", "GitHubActivationPlan", "GitHubOrchestrator", "HGFMBuilder",
-    "HGFMGraph", "CouncilDecision", "LocalAICouncilAdapter", "ModelAnswer", "MemoryEdge", "MemoryGraph", "MemoryNode", "GraphProblemMiner",
+    "HGFMGraph", "AITIPDocket", "IPDisclosure", "IPDocketPlan", "CouncilDecision", "LocalAICouncilAdapter", "ModelAnswer", "MemoryEdge", "MemoryGraph", "MemoryNode", "GraphProblemMiner",
     "ProblemSeed", "OAKGate", "OAKResult", "Proposal", "ProposalChange",
     "ProposalValidation", "ProposalValidator", "AITQuebecResearchAbsorber", "QuebecResearchCard", "QuebecSynergy", "AITRouteSelector", "RouteGoal", "RoutePlan", "Runner", "RunResult", "StateBook",
     "StateStep", "TextPublisher", "TextSection"
