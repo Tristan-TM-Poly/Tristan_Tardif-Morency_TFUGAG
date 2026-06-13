@@ -1,5 +1,6 @@
 from .agent_harness import AgentAction, AgentHarnessAdapter, AgentTrace
 from .ait_code_analyser_writer import AITCodeAnalyserWriter, FileSignal, RepoSignal
+from .autonomous_genesis import AITAutonomousGenesis, GenesisPolicy, GenesisProposal, GenesisReport, GenesisSeed
 from .capability_absorber import AITCapabilityAbsorber, AbsorptionPlan, CapabilityCard, CapabilityPolicy, IntegrationBacklogItem
 from .algebra import AlgebraRoute, TGFAAlgebraRouter
 from .cvcd import CVCDResidue, OmniCVCDExtractor
@@ -18,6 +19,7 @@ from .writer import TextPublisher, TextSection
 
 __all__ = [
     "AgentAction", "AgentHarnessAdapter", "AgentTrace", "AITCodeAnalyserWriter", "FileSignal", "RepoSignal",
+    "AITAutonomousGenesis", "GenesisPolicy", "GenesisProposal", "GenesisReport", "GenesisSeed",
     "AITCapabilityAbsorber", "AbsorptionPlan", "CapabilityCard", "CapabilityPolicy", "IntegrationBacklogItem",
     "AlgebraRoute", "TGFAAlgebraRouter", "CVCDResidue", "OmniCVCDExtractor",
     "DeliveryAssessment", "DeliveryHarnessAdapter", "DeliverySignal", "TFUGAEngine", "GitHubActivationPlan", "GitHubOrchestrator", "HGFMBuilder",
