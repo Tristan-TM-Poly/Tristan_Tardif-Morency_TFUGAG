@@ -1,0 +1,27 @@
+{
+  "pr": 6,
+  "title": "[codex] Add TFUGA Python library + Readiness",
+  "state": "open",
+  "draft": true,
+  "mergeable": true,
+  "head_sha": "eae3ef2fbb1f93275325cec2b79acc728204507d",
+  "commits": 17,
+  "changed_files": 48,
+  "additions": 1832,
+  "deletions": 0,
+  "modules": [
+    "AITCodeAnalyserWriter",
+    "AITCapabilityAbsorber",
+    "LocalAICouncilAdapter",
+    "DeliveryHarnessAdapter",
+    "AgentHarnessAdapter",
+    "AITAutonomousGenesis",
+    "AITRouteSelector",
+    "AITQuebecResearchAbsorber",
+    "AITAutonomousPushRunPublish",
+    "AITControlPlane",
+    "AITStatusBoard",
+    "AITReadiness"
+  ],
+  "oak_invariant": "signals -> readiness -> status -> roadmap -> report -> draft PR"
+}
