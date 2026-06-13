@@ -4,6 +4,7 @@ from .autonomous_genesis import AITAutonomousGenesis, GenesisPolicy, GenesisProp
 from .autonomous_push_run_publish import AITAutonomousPushRunPublish, PRPPlan, PRPPolicy, PRPReport, PRPRequest
 from .capability_absorber import AITCapabilityAbsorber, AbsorptionPlan, CapabilityCard, CapabilityPolicy, IntegrationBacklogItem
 from .algebra import AlgebraRoute, TGFAAlgebraRouter
+from .control_plane import AITControlPlane, ControlPlaneInput, ControlPlaneReport
 from .cvcd import CVCDResidue, OmniCVCDExtractor
 from .delivery_harness import DeliveryAssessment, DeliveryHarnessAdapter, DeliverySignal
 from .engine import TFUGAEngine
@@ -25,7 +26,7 @@ __all__ = [
     "AITAutonomousGenesis", "GenesisPolicy", "GenesisProposal", "GenesisReport", "GenesisSeed",
     "AITAutonomousPushRunPublish", "PRPPlan", "PRPPolicy", "PRPReport", "PRPRequest",
     "AITCapabilityAbsorber", "AbsorptionPlan", "CapabilityCard", "CapabilityPolicy", "IntegrationBacklogItem",
-    "AlgebraRoute", "TGFAAlgebraRouter", "CVCDResidue", "OmniCVCDExtractor",
+    "AlgebraRoute", "TGFAAlgebraRouter", "AITControlPlane", "ControlPlaneInput", "ControlPlaneReport", "CVCDResidue", "OmniCVCDExtractor",
     "DeliveryAssessment", "DeliveryHarnessAdapter", "DeliverySignal", "TFUGAEngine", "GitHubActivationPlan", "GitHubOrchestrator", "HGFMBuilder",
     "HGFMGraph", "CouncilDecision", "LocalAICouncilAdapter", "ModelAnswer", "MemoryEdge", "MemoryGraph", "MemoryNode", "GraphProblemMiner",
     "ProblemSeed", "OAKGate", "OAKResult", "Proposal", "ProposalChange",
