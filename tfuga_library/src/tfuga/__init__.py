@@ -1,4 +1,5 @@
 from .ait_code_analyser_writer import AITCodeAnalyserWriter, FileSignal, RepoSignal
+from .capability_absorber import AITCapabilityAbsorber, AbsorptionPlan, CapabilityCard, CapabilityPolicy, IntegrationBacklogItem
 from .algebra import AlgebraRoute, TGFAAlgebraRouter
 from .cvcd import CVCDResidue, OmniCVCDExtractor
 from .engine import TFUGAEngine
@@ -14,6 +15,7 @@ from .writer import TextPublisher, TextSection
 
 __all__ = [
     "AITCodeAnalyserWriter", "FileSignal", "RepoSignal",
+    "AITCapabilityAbsorber", "AbsorptionPlan", "CapabilityCard", "CapabilityPolicy", "IntegrationBacklogItem",
     "AlgebraRoute", "TGFAAlgebraRouter", "CVCDResidue", "OmniCVCDExtractor",
     "TFUGAEngine", "GitHubActivationPlan", "GitHubOrchestrator", "HGFMBuilder",
     "HGFMGraph", "MemoryEdge", "MemoryGraph", "MemoryNode", "GraphProblemMiner",
