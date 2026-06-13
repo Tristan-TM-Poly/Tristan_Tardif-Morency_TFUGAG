@@ -13,6 +13,7 @@ from .memory import MemoryEdge, MemoryGraph, MemoryNode
 from .miner import GraphProblemMiner, ProblemSeed
 from .oak import OAKGate, OAKResult
 from .proposals import Proposal, ProposalChange, ProposalValidation, ProposalValidator
+from .quebec_research_absorber import AITQuebecResearchAbsorber, QuebecResearchCard, QuebecSynergy
 from .route_selector import AITRouteSelector, RouteGoal, RoutePlan
 from .runner import Runner, RunResult
 from .statebook import StateBook, StateStep
@@ -26,6 +27,6 @@ __all__ = [
     "DeliveryAssessment", "DeliveryHarnessAdapter", "DeliverySignal", "TFUGAEngine", "GitHubActivationPlan", "GitHubOrchestrator", "HGFMBuilder",
     "HGFMGraph", "CouncilDecision", "LocalAICouncilAdapter", "ModelAnswer", "MemoryEdge", "MemoryGraph", "MemoryNode", "GraphProblemMiner",
     "ProblemSeed", "OAKGate", "OAKResult", "Proposal", "ProposalChange",
-    "ProposalValidation", "ProposalValidator", "AITRouteSelector", "RouteGoal", "RoutePlan", "Runner", "RunResult", "StateBook",
+    "ProposalValidation", "ProposalValidator", "AITQuebecResearchAbsorber", "QuebecResearchCard", "QuebecSynergy", "AITRouteSelector", "RouteGoal", "RoutePlan", "Runner", "RunResult", "StateBook",
     "StateStep", "TextPublisher", "TextSection"
 ]
