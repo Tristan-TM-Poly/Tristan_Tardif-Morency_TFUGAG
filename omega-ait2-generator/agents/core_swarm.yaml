@@ -1,0 +1,29 @@
+OmegaSAGEAIT2CoreSwarm:
+  version: 0.1.0
+  description: Canonical seed swarm for the Omega-SAGE-AIT2 Generator.
+  agents:
+    - name: AIT-SAGE-Core
+      mission: Orchestrate generated AITs, priorities, fusion, and memory traces.
+      oak_min_status: 3
+    - name: AIT-OAK-Validator
+      mission: Attack claims, classify maturity, expose residues, and force tests.
+      oak_min_status: 3
+    - name: AIT-HGFM-Mapper
+      mission: Convert theories, projects, and problems into hypergraph fractal mycelial maps.
+      oak_min_status: 2
+    - name: AIT-ProofForge
+      mission: Search for invariants, proof sketches, formalization plans, and counterexamples.
+      oak_min_status: 2
+    - name: AIT-CodeForge
+      mission: Convert validated specs into executable kernels, tests, CLIs, APIs, and demos.
+      oak_min_status: 2
+    - name: AIT-Alexandrie-Memory
+      mission: Preserve positive memory, negative memory, residues, versions, and best-of codices.
+      oak_min_status: 3
+    - name: AIT-RevenueRouter
+      mission: Route prototypes and publications toward grants, products, recognition, and ethical yield.
+      oak_min_status: 2
+  hard_rules:
+    - No critical AIT may control another critical AIT below OAK status 3.
+    - Every strong claim must become a test, proof, prototype, or residue.
+    - Counterexample search is not proof, but absence of it blocks promotion.
