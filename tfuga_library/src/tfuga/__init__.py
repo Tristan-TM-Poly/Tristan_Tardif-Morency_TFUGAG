@@ -1,3 +1,4 @@
+from .ait_code_analyser_writer import AITCodeAnalyserWriter, FileSignal, RepoSignal
 from .algebra import AlgebraRoute, TGFAAlgebraRouter
 from .cvcd import CVCDResidue, OmniCVCDExtractor
 from .engine import TFUGAEngine
@@ -12,6 +13,7 @@ from .statebook import StateBook, StateStep
 from .writer import TextPublisher, TextSection
 
 __all__ = [
+    "AITCodeAnalyserWriter", "FileSignal", "RepoSignal",
     "AlgebraRoute", "TGFAAlgebraRouter", "CVCDResidue", "OmniCVCDExtractor",
     "TFUGAEngine", "GitHubActivationPlan", "GitHubOrchestrator", "HGFMBuilder",
     "HGFMGraph", "MemoryEdge", "MemoryGraph", "MemoryNode", "GraphProblemMiner",
