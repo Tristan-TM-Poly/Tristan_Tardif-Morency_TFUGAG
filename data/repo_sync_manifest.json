@@ -1,0 +1,14 @@
+{
+  "repo": "Tristan_Tardif-Morency_TFUGAG",
+  "role": "governance and handoff branch",
+  "status": "prototype",
+  "kernel_repo": "TTM-TFUGA-AI7-TRISTAN2",
+  "kernel_pr": 30,
+  "local_pr": 7,
+  "sync_files": [
+    "docs/CANON_ROLE_2026_06_18.md",
+    "docs/CLAIM_STATUS_SCHEMA.md",
+    "docs/OAK_AIRGAP_HANDOFF_TEMPLATE.md"
+  ],
+  "next_action": "keep schema and handoff docs aligned with the kernel registry"
+}
