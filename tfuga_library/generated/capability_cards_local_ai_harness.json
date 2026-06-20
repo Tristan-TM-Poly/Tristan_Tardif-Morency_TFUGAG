@@ -1,0 +1,30 @@
+{
+  "cards": [
+    {
+      "name": "Local AI council",
+      "source": "public reporting about local self-hosted AI experiments",
+      "license_name": "public-docs",
+      "capability": "local-first multi-model council, private retrieval memory, local inference experimentation, parallel model comparison",
+      "pattern": "local_ai_council_adapter",
+      "notes": "Absorb the capability pattern only; do not copy identity, likeness, voice, private code, or copyrighted media."
+    },
+    {
+      "name": "AI delivery control loop",
+      "source": "AI DevOps reporting and agent-harness research literature",
+      "license_name": "public-docs",
+      "capability": "AI-speed software delivery with quality gates, hidden-work tracking, branch/PR/CI orchestration, and verification loops",
+      "pattern": "devops_harness_adapter",
+      "notes": "Map ideas into OAK gates, CI evidence, code review load tracking, and repository automation."
+    },
+    {
+      "name": "Agent harness reference architecture",
+      "source": "agent harness research literature",
+      "license_name": "public-docs",
+      "capability": "model wrapper layer that manages tools, state, resource bounds, execution traces, and repository actions",
+      "pattern": "agent_harness_adapter",
+      "notes": "Use as a conceptual interface for TFUGA assistant operations."
+    }
+  ],
+  "oak_rule": "capability -> source/license -> adapter boundary -> tests -> docs -> draft PR",
+  "safety_rule": "absorb capabilities and interface patterns, not raw third-party code or identity assets"
+}
