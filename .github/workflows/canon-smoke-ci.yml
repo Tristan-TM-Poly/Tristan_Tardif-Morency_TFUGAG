@@ -1,0 +1,119 @@
+name: Canon Smoke OAK CI
+
+on:
+  pull_request:
+    paths:
+      - "data/repo_sync_manifest.json"
+      - "docs/CANON_ROLE_2026_06_18.md"
+      - "docs/CLAIM_STATUS_SCHEMA.md"
+      - "docs/JKD_SAFE_ROUTE.md"
+      - "docs/NEXT_ACTIONS.md"
+      - "docs/OAK_AIRGAP_HANDOFF_TEMPLATE.md"
+      - "docs/REVIEW_ORDER.md"
+      - "docs/REVIEW_SCORE.md"
+      - ".github/workflows/canon-smoke-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: canon-smoke-oak-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-canon-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate repository-role manifest and canon docs
+        run: |
+          python - <<'PY'
+          from __future__ import annotations
+
+          import json
+          import re
+          from pathlib import Path
+
+          manifest_path = Path("data/repo_sync_manifest.json")
+          assert manifest_path.is_file(), "missing repo_sync_manifest.json"
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          assert isinstance(manifest, dict), "sync manifest must be an object"
+
+          required_manifest_keys = {
+              "repo", "role", "status", "kernel_repo", "kernel_pr",
+              "local_pr", "sync_files", "next_action",
+          }
+          assert required_manifest_keys <= manifest.keys(), "sync manifest missing required keys"
+          assert manifest["repo"] == "Tristan_Tardif-Morency_TFUGAG"
+          assert manifest["local_pr"] == 7
+          assert isinstance(manifest["kernel_pr"], int) and manifest["kernel_pr"] > 0
+          assert isinstance(manifest["role"], str) and manifest["role"].strip()
+          assert isinstance(manifest["next_action"], str) and manifest["next_action"].strip()
+
+          allowed_statuses = {
+              "metaphor_or_vision", "formal_definition", "prototype",
+              "speculative_fertile", "measured_claim", "proven_theorem",
+              "negative_memory",
+          }
+          assert manifest["status"] in allowed_statuses
+
+          sync_files = manifest["sync_files"]
+          assert isinstance(sync_files, list) and sync_files, "sync_files must be non-empty"
+          assert len(sync_files) == len(set(sync_files)), "sync_files contains duplicates"
+          for raw in sync_files:
+              assert isinstance(raw, str) and raw.strip()
+              path = Path(raw)
+              assert not path.is_absolute() and ".." not in path.parts
+              assert path.is_file(), f"declared sync file missing: {raw}"
+
+          required_docs = (
+              "docs/CANON_ROLE_2026_06_18.md",
+              "docs/CLAIM_STATUS_SCHEMA.md",
+              "docs/JKD_SAFE_ROUTE.md",
+              "docs/NEXT_ACTIONS.md",
+              "docs/OAK_AIRGAP_HANDOFF_TEMPLATE.md",
+              "docs/REVIEW_ORDER.md",
+              "docs/REVIEW_SCORE.md",
+          )
+          for raw in required_docs:
+              path = Path(raw)
+              assert path.is_file(), f"missing canon document: {raw}"
+              text = path.read_text(encoding="utf-8")
+              assert text.strip(), f"empty canon document: {raw}"
+              assert any(line.startswith("# ") for line in text.splitlines()), (
+                  f"missing level-1 heading: {raw}"
+              )
+
+          schema_text = Path("docs/CLAIM_STATUS_SCHEMA.md").read_text(encoding="utf-8")
+          for status in sorted(allowed_statuses):
+              assert f"`{status}`" in schema_text, f"claim status missing from schema doc: {status}"
+          for gate in ("safe", "needs_test", "needs_measurement", "claim_risk"):
+              assert f"`{gate}`" in schema_text, f"OAK gate missing from schema doc: {gate}"
+
+          # Fail closed on obvious credential literals while printing only file names.
+          secret_patterns = (
+              re.compile(r"sk-[A-Za-z0-9_-]{20,}"),
+              re.compile(r"ghp_[A-Za-z0-9]{20,}"),
+              re.compile(r"github_pat_[A-Za-z0-9_]{20,}"),
+              re.compile(r"-----BEGIN (?:RSA|OPENSSH|EC|DSA|PRIVATE) KEY-----"),
+          )
+          for raw in (*required_docs, "data/repo_sync_manifest.json"):
+              text = Path(raw).read_text(encoding="utf-8")
+              assert not any(pattern.search(text) for pattern in secret_patterns), (
+                  f"credential-like literal detected in {raw}"
+              )
+
+          print("canon-smoke contract: PASS")
+          print("external_mutation_performed=false")
+          print("publication_performed=false")
+          print("merge_authorized=false")
+          PY
