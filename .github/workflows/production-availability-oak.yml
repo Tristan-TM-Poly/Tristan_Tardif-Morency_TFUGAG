@@ -1,0 +1,160 @@
+name: Production Availability OAK
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "index.html"
+      - "healthz.html"
+      - "vercel.json"
+      - "assets/**"
+      - "integrity/**"
+      - ".github/workflows/production-availability-oak.yml"
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: production-availability-oak
+  cancel-in-progress: true
+
+env:
+  PROD_APEX: https://axiome-tristan.com/
+  PROD_WWW: https://www.axiome-tristan.com/
+  PROD_BENCH: https://www.axiome-tristan.com/integrity/usif-bench
+  PROD_HEALTH: https://www.axiome-tristan.com/healthz
+  INCIDENT_TITLE: "OAK production availability incident: axiome-tristan.com"
+
+jobs:
+  smoke:
+    name: Probe public production
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Allow Vercel production promotion to settle
+        if: github.event_name == 'push'
+        run: sleep 45
+
+      - name: Probe canonical endpoints with bounded retries
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          probe() {
+            local url="$1"
+            local marker="$2"
+            local body
+            body="$(mktemp)"
+
+            for attempt in 1 2 3 4 5 6 7 8; do
+              status="$(curl \
+                --silent \
+                --show-error \
+                --location \
+                --connect-timeout 10 \
+                --max-time 30 \
+                --output "$body" \
+                --write-out '%{http_code}' \
+                "$url" || true)"
+
+              if [[ "$status" == "200" ]] && grep --fixed-strings --quiet "$marker" "$body"; then
+                echo "PASS $url status=$status marker=$marker attempt=$attempt"
+                rm -f "$body"
+                return 0
+              fi
+
+              echo "WARN $url status=${status:-curl_error} marker=$marker attempt=$attempt" >&2
+              sleep $((attempt * 5))
+            done
+
+            echo "FAIL $url did not reach the expected production state" >&2
+            echo "Last response excerpt:" >&2
+            head -c 800 "$body" >&2 || true
+            echo >&2
+            rm -f "$body"
+            return 1
+          }
+
+          probe "$PROD_APEX" "AXIOME TRISTAN"
+          probe "$PROD_WWW" "AXIOME TRISTAN"
+          probe "$PROD_BENCH" "USIF-Bench"
+          probe "$PROD_HEALTH" "status=ok"
+
+          echo "production-availability-oak: PASS"
+
+  incident:
+    name: Open or update availability incident
+    needs: smoke
+    if: ${{ failure() }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - name: Create or update incident issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          existing="$(gh issue list \
+            --repo "$GITHUB_REPOSITORY" \
+            --state open \
+            --search "OAK production availability incident in:title" \
+            --json number,title \
+            --jq '.[] | select(.title == "OAK production availability incident: axiome-tristan.com") | .number' \
+            | head -n 1)"
+
+          body=$(cat <<EOF
+          Production smoke checks failed.
+
+          - Workflow: ${GITHUB_WORKFLOW}
+          - Run: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
+          - Commit: ${GITHUB_SHA}
+          - Event: ${GITHUB_EVENT_NAME}
+          - Endpoints checked: apex, www, USIF-Bench, /healthz
+
+          OAK rule: treat this as an availability residual. Do not strengthen public claims or perform unrelated deployment mutations until production is green again.
+          EOF
+          )
+
+          if [[ -n "$existing" ]]; then
+            gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" --body "$body"
+            echo "Updated incident #$existing"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$INCIDENT_TITLE" --body "$body"
+          fi
+
+  recovery:
+    name: Close recovered availability incident
+    needs: smoke
+    if: ${{ success() }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - name: Close prior incident if production recovered
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          existing="$(gh issue list \
+            --repo "$GITHUB_REPOSITORY" \
+            --state open \
+            --search "OAK production availability incident in:title" \
+            --json number,title \
+            --jq '.[] | select(.title == "OAK production availability incident: axiome-tristan.com") | .number' \
+            | head -n 1)"
+
+          if [[ -z "$existing" ]]; then
+            echo "No open production availability incident."
+            exit 0
+          fi
+
+          gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" --body "Production smoke checks recovered on run https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}. Closing automatically after verified green probes."
+          gh issue close "$existing" --repo "$GITHUB_REPOSITORY" --reason completed
